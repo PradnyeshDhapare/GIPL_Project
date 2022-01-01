@@ -17,6 +17,7 @@ struct player
     char sName[50];
     int jHints;
     int jScore;
+    int jLine;
 } c2;
 void instructions()
 {
@@ -429,6 +430,64 @@ void Register()
     fprintf(rfile,"%s\n",password);
     fclose(rfile);
 }
+void gameLogin()
+{
+    printf("Enter user name \n");
+    char sUser[50];
+    scanf("%s", &sUser);
+    FILE *Fpfile = fopen("registerDetails.txt", "r");
+    char line1[300];
+    int found1 = 0;
+    c2.jLine=1;              
+    while (fgets(line1, sizeof(line1), Fpfile))
+    {
+        char *s;
+        s = strstr(line1, sUser);
+        if (s != NULL)
+        {
+            found1 = 1;
+            break;
+        }
+        c2.jLine++;
+    }
+    if (found1 == 1)
+    {
+        printf("User name  is correct\n");
+    }
+    else
+    {
+        printf("enter valid User name \n");
+        gameLogin();
+    }
+    fclose(Fpfile);
+}
+void gamePassCheck()
+{
+    printf("Enter your password\n");
+    char sUserpass[50];
+    scanf("%s", &sUserpass);
+    FILE *Fpfile = fopen("registerDetails.txt", "r");
+    char line2[300];
+    int i1=0;
+    int jLineP=c2.jLine+1; 
+    while (fgets(line2, sizeof(line2), Fpfile))
+    {
+        i1++;
+        if (i1 ==jLineP)
+        {
+            if (strstr(line2, sUserpass))
+            {
+                printf("Password is correct\n");
+            }
+            else{
+                printf("Password is incorrect\n");
+                gamePassCheck();
+            }    
+        }
+    }
+    fclose(Fpfile);    
+
+}
 int main()
 {
     printf("If you are already user then enter login otherwise register\n");
@@ -436,11 +495,14 @@ int main()
     scanf("%s", &login);
     if(strcmp(login, "login") == 0)
     {
-        //login function
+        gameLogin();
+        gamePassCheck();
     }
     else
     {
         Register();
+        gameLogin();
+        gamePassCheck();
     }
     instructions();
     char s_str2[20];
