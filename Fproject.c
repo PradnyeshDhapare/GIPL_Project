@@ -259,12 +259,12 @@ void updatefinalScore()
     while ((fgets(buffer, BUFFER_SIZE, fPtr)) != NULL)
     {
         count++;
-        printf("%d Count %d\n", count, c1.j_line4);
+        //printf("%d Count %d\n", count, c1.j_line4);
         /* If current line is line to replace */
         if (count == c1.j_line4)
         {
             newline[1] = '\n';
-            printf("%d newline type", c1.j_line3);
+            //printf("%d newline type", c1.j_line3);
             fputs(newline, fTemp);
         }
 
@@ -361,9 +361,10 @@ void startGame(char chCatgory, char chLevel)
         {
             updateHints();
             updatefinalScore();
-            exit(0);
+            exit(0);                                                       //check this
         }
     }
+   
     showQuestion(jQNo, chCatgory, chLevel);
     printf("your hints are %d", c2.jHints);
     printf("To take a hint enter H\n To  exit from the game enter exit\n To skip a question enter skip\n ");
@@ -415,9 +416,32 @@ void chooseCategoryLevel()
         }
     }
 }
+void Register()
+{
+    FILE *rfile = fopen("registerDetails.txt","a+");
+    printf("Enter user name\n");
+    char userName[50];
+    scanf("%s", &userName);
+    printf("Enter password\n");
+    char password[50];
+    scanf("%s", &password);
+    fprintf(rfile,"%s\n",userName);
+    fprintf(rfile,"%s\n",password);
+    fclose(rfile);
+}
 int main()
 {
-
+    printf("If you are already user then enter login otherwise register\n");
+    char login[50];
+    scanf("%s", &login);
+    if(strcmp(login, "login") == 0)
+    {
+        //login function
+    }
+    else
+    {
+        Register();
+    }
     instructions();
     char s_str2[20];
     scanf("%s", s_str2);
