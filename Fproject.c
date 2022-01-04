@@ -242,7 +242,7 @@ void updatefinalScore()
     /*  Open all required files */
 
     fTemp = fopen("replace.txt", "w");
-    printf("file opened ");
+    //printf("file opened ");
     /* fopen() return NULL if unable to open file in given mode. */
     // if (fPtr == NULL || fTemp == NULL)
     // {
@@ -284,6 +284,52 @@ void updatefinalScore()
 
     /* Rename temporary file as original file */
     rename("replace.txt", "playerInfo.txt");
+}
+void forgetPass()
+{
+    printf("Enter Your New Password\n");
+    char newPass[50];
+    scanf("%s", &newPass);
+    printf("Enter password again\n");
+    char rePass[50];
+    scanf("%s", &rePass);
+    if(strstr(newPass,rePass))
+    {
+        FILE *fPtr = fopen("registerDetails.txt", "r");
+        FILE *fTemp; 
+        char buffer1[BUFFER_SIZE];
+        char newline1[BUFFER_SIZE];
+        strcpy( newline1, rePass ); 
+        int count;
+        int jchange=c2.jLine+1;
+        fflush(stdin);
+        fTemp = fopen("replace.txt", "w");
+        count = 0;
+        while ((fgets(buffer1, BUFFER_SIZE, fPtr)) != NULL)
+        {
+            count++;
+            if (count == jchange)
+            {
+                //newline1[1] = '\n';
+                //printf("%d newline type", c1.j_line3);
+                fputs(newline1, fTemp);
+            }
+
+            else
+            {
+                fputs(buffer1, fTemp);
+            }
+        }
+        fclose(fPtr);
+        fclose(fTemp);
+        remove("registerDetails.txt");
+        rename("replace.txt", "registerDetails.txt");
+    }
+    else{
+        printf("Enter again\n");
+        forgetPass();
+    }
+
 }
 void updateHints()
 {
@@ -481,7 +527,17 @@ void gamePassCheck()
             }
             else{
                 printf("Password is incorrect\n");
-                gamePassCheck();
+                printf("If you forget password then enter forget otherwise enter ok\n");
+                char sforget[50];
+                scanf("%s", &sforget);
+                if(strcmp(sforget, "forget") == 0)
+                {
+                    forgetPass();
+                }
+                else{
+                    gamePassCheck();
+                }
+                
             }    
         }
     }
